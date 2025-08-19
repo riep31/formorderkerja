@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Order Kerja - PT. DAGSAP ENDURA EATORE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            table-layout: fixed;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+        
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .header-table th {
+            background-color: #fff;
+        }
+        
+        .body-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .body-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .table-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0 10px 0;
+        }
+        
+        .field-name {
+            font-weight: bold;
+            background-color: #e8f5e8;
+            width: 200px;
+            min-width: 200px;
+        }
+        
+        .body-table td:not(.field-name) {
+            width: calc(100% - 200px);
+            max-width: 0;
+            hyphens: auto;
+            line-height: 1.4;
+        }
+        
+        .long-text-row td:not(.field-name) {
+            min-height: 60px;
+        }
+        
+        .company-name {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+            margin: 10px 0;
+        }
+        
+        .footer-table {
+            margin-top: 10px;
+        }
+        
+        .footer-table td {
+            text-align: center;
+            vertical-align: middle;
+            width: 20%;
+            height: 50px;
+            font-weight: bold;
+            background-color: #fff;
+            border: none;
+        }
+        
+        .signature-row {
+            height: 50px;
+            background-color: #fff;
+        }
+        
+        .name-row {
+            height: 20px;
+            background-color: #fff;
+            font-size: 12px;
+        }
+        
+        .signature-row td,
+        .name-row td {
+            border: none;
+        }
+        
+        .qr-code {
+            width: 50px;
+            height: 50px;
+            margin: 5px auto;
+            display: block;
+        }
+
+        .info-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .info-section h4 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            text-align: center;
+            margin: 20px 0;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #1e7e34;
+        }
+
+        .image-container {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #f8f9fa;
+        }
+
+        .dynamic-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .image-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #999;
+            font-style: italic;
+            text-align: center;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .image-container.has-image .image-placeholder {
+            display: none;
+        }
+
+        .image-container.loading::after {
+            content: "Memuat gambar...";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #007bff;
+            font-size: 14px;
+        }
+
+        .bg-image-container {
+            width: 400px;
+            height: 300px;
+            margin: 0 auto;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            position: relative;
+            display: none;
+        }
+
+        .bg-image-container.has-bg-image {
+            display: block;
+        }
+
+        .bg-image-container .image-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #999;
+            font-style: italic;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .attr-display::after {
+            content: attr(data-value);
+        }
+
+        .status-completed::after { color: #28a745; font-weight: bold; }
+        .status-in-progress::after { color: #ffc107; font-weight: bold; }
+        .status-pending::after { color: #dc3545; font-weight: bold; }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dynamic-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: #4CAF50;
+        }
+
+        .checkbox-label {
+            cursor: pointer;
+            font-weight: normal;
+            flex: 1;
+        }
+
+        .param-code {
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 11px;
+            margin: 5px 0;
+            word-break: break-all;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+            }
+            .container {
+                box-shadow: none;
+                max-width: none;
+                margin: 0;
+                padding: 0;
+            }
+            .buttons, .info-section {
+                display: none;
+            }
+            
+            .body-table tr:nth-child(even) {
+                background-color: white !important;
+            }
+            
+            .page-break {
+                page-break-before: always;
+            }
+            
+            @page {
+                size: A4;
+                margin: 5mm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Form Preview - Halaman 1 -->
+        <div id="printArea">
+            <div class="table-title"></div>
+            <table class="header-table">
+                <tbody>
+                    <tr>
+                        <td rowspan="5" style="text-align: center; vertical-align: middle;">
+                             <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYyanHkNjy-MEGWx-yRWA8XiFF9HbWiLoGFY9HRkEpuBXKYGjxU_TMW2dK4ONcqKA4tg&usqp=CAU' width='100' height='60' style='margin-right: 10px; padding: 1px;'>
+                             <div class="company-name">PT.DAGSAP ENDURA EATORE</div>
+                        </td>
+                        <td rowspan="5" style="text-align: center; vertical-align: middle; font-size: 22px; font-weight: bold; color: #333;">
+                            FORM ORDER KERJA (OK)
+                        </td>
+                        <td>Nomor Dokumen</td>
+                        <td>DEE-YG-SX-XX-003-13</td>
+                    </tr>
+                    <tr>
+                        <td>Status Dokumen</td>
+                        <td>Dikendalikan</td>
+                    </tr>
+                    <tr>
+                        <td>Revisi</td>
+                        <td>02</td>
+                    </tr>
+                    <tr>
+                        <td>Tanggal Terbit</td>
+                        <td>10 Maret 2021</td>
+                    </tr>
+                    <tr>
+                        <td>Halaman</td>
+                        <td>1 dari 3</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="table-title">Detail order kerja</div>
+            <table class="body-table">
+                <tbody>
+                    <tr>
+                        <td class="field-name">No. OK</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="field-name">Department</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="field-name">Nama</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="field-name">Nama Sifat Pekerjaan</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="field-name">Jenis Pekerjaan</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="field-name">Waktu Pengerjaan</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr class="long-text-row">
+                        <td class="field-name">Rincian Pekerjaan</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr class="long-text-row">
+                        <td class="field-name">Koreksi</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr class="long-text-row">
+                        <td class="field-name">Root Cause Analysis</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr class="long-text-row">
+                        <td class="field-name">Corrective Action</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="field-name">Target Selesai</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="field-name">Actual Selesai</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="field-name">Status</td>
+                        <td class="attr-display" data-value="-"></td>
+                    </tr>
+                </tbody>
+            </table>
+          
+            <div class="table-title">Checklist Verifikasi</div>
+            <table class="body-table">
+                <tbody>
+                    <tr>
+                        <td style="width: 50px; text-align: center; vertical-align: middle;">
+                            <input type="checkbox" id="check1" class="dynamic-checkbox" disabled>
+                        </td>
+                        <td>
+                            <label for="check1" class="checkbox-label">Cek kebersihan mesin dan area mesin oleh QC</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50px; text-align: center; vertical-align: middle;">
+                            <input type="checkbox" id="check2" class="dynamic-checkbox" disabled>
+                        </td>
+                        <td>
+                            <label for="check2" class="checkbox-label">Cek kelengkapan mesin dan kelengkapan alat oleh operator produksi dan teknisi</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50px; text-align: center; vertical-align: middle;">
+                            <input type="checkbox" id="check3" class="dynamic-checkbox" disabled>
+                        </td>
+                        <td>
+                            <label for="check3" class="checkbox-label">Serah terima mesin oleh teknisi kepada operator produksi</label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="footer-table">
+                <tbody>
+                    <tr>
+                        <td>Diminta Oleh</td>
+                        <td>Menyetujui</td>
+                        <td>Pelaksana</td>
+                        <td>Diketahui</td>
+                        <td>Diterima Oleh</td>
+                    </tr>
+                    <tr class="signature-row">
+                        <td>
+                            <img id="qr1" class="qr-code" alt="QR Code Diminta Oleh">
+                        </td>
+                        <td>
+                            <img id="qr2" class="qr-code" alt="QR Code Menyetujui">
+                        </td>
+                        <td>
+                            <img id="qr3" class="qr-code" alt="QR Code Pelaksana">
+                        </td>
+                        <td>
+                            <img id="qr4" class="qr-code" alt="QR Code Diketahui">
+                        </td>
+                        <td>
+                            <img id="qr5" class="qr-code" alt="QR Code Diterima Oleh">
+                        </td>
+                    </tr>
+                    <tr class="name-row">
+                        <td id="name1">-<br>-</td>
+                        <td id="name2">-<br>-</td>
+                        <td id="name3">-<br>-</td>
+                        <td id="name4">-<br>-</td>
+                        <td id="name5">-<br>-</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Halaman 2: Gambar 1 dan 2 -->
+            <div class="page-break">
+                <div class="table-title">Foto Rincian Pekerjaan - Halaman 2</div>
+                <table class="body-table">
+                    <tbody>
+                        <tr>
+                            <td class="field-name">Lampiran Foto 1</td>
+                            <td style="text-align: center; padding: 20px;">
+                                <div id="image1-container" class="image-container">
+                                    <img id="image1" class="dynamic-image" alt="Gambar 1">
+                                    <div class="image-placeholder">Tidak ada gambar 1 tersedia</div>
+                                </div>
+                                
+                                <div id="image1-bg" class="bg-image-container">
+                                    <div class="image-placeholder">Tidak ada gambar 1 tersedia</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field-name">Lampiran Foto  2</td>
+                            <td style="text-align: center; padding: 20px;">
+                                <div id="image2-container" class="image-container">
+                                    <img id="image2" class="dynamic-image" alt="Gambar 2">
+                                    <div class="image-placeholder">Tidak ada gambar 2 tersedia</div>
+                                </div>
+                                
+                                <div id="image2-bg" class="bg-image-container">
+                                    <div class="image-placeholder">Tidak ada gambar 2 tersedia</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Halaman 3: Gambar 3 dan 4 -->
+            <div class="page-break">
+                <div class="table-title">Foto Rincian Pekerjaan - Halaman 3</div>
+                <table class="body-table">
+                    <tbody>
+                        <tr>
+                            <td class="field-name">Foto Sudah Dikerjakan</td>
+                            <td style="text-align: center; padding: 20px;">
+                                <div id="image3-container" class="image-container">
+                                    <img id="image3" class="dynamic-image" alt="Gambar 3">
+                                    <div class="image-placeholder">Tidak ada gambar 3 tersedia</div>
+                                </div>
+                                
+                                <div id="image3-bg" class="bg-image-container">
+                                    <div class="image-placeholder">Tidak ada gambar 3 tersedia</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field-name">Foto Cek Kebersihan</td>
+                            <td style="text-align: center; padding: 20px;">
+                                <div id="image4-container" class="image-container">
+                                    <img id="image4" class="dynamic-image" alt="Gambar 4">
+                                    <div class="image-placeholder">Tidak ada gambar 4 tersedia</div>
+                                </div>
+                                
+                                <div id="image4-bg" class="bg-image-container">
+                                    <div class="image-placeholder">Tidak ada gambar 4 tersedia</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="buttons">
+            <button class="btn" onclick="window.print()">Print Form</button>
+            <button class="btn btn-success" onclick="exportToPDF()">Export PDF</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Get all parameters including name parameters
+            const params = {
+                'image1': urlParams.get('image1') || '',
+                'image2': urlParams.get('image2') || '',
+                'image3': urlParams.get('image3') || '',
+                'image4': urlParams.get('image4') || '',
+                'noOK': urlParams.get('noOK') || '-',
+                'department': urlParams.get('department') || '-',
+                'nama': urlParams.get('nama') || '-',
+                'namaKerja': urlParams.get('namaKerja') || '-',
+                'jenisKerja': urlParams.get('jenisKerja') || '-',
+                'waktuKerja': urlParams.get('waktuKerja') || '-',
+                'rincianKerja': urlParams.get('rincianKerja') || '-',
+                'koreksi': urlParams.get('koreksi') || '-',
+                'rootCause': urlParams.get('rootCause') || '-',
+                'correctiveAction': urlParams.get('correctiveAction') || '-',
+                'targetSelesai': urlParams.get('targetSelesai') || '-',
+                'actualSelesai': urlParams.get('actualSelesai') || '-',
+                'status': urlParams.get('status') || '-',
+                'check1': urlParams.get('check1') || 'false',
+                'check2': urlParams.get('check2') || 'false',
+                'check3': urlParams.get('check3') || 'false',
+                'sig1': urlParams.get('sig1') || '',
+                'sig2': urlParams.get('sig2') || '',
+                'sig3': urlParams.get('sig3') || '',
+                'sig4': urlParams.get('sig4') || '',
+                'sig5': urlParams.get('sig5') || '',
+                'name1': urlParams.get('name1') || '',
+                'name2': urlParams.get('name2') || '',
+                'name3': urlParams.get('name3') || '',
+                'name4': urlParams.get('name4') || '',
+                'name5': urlParams.get('name5') || ''
+            };
+
+            // Function to handle checkbox state
+            function setupCheckbox(checkboxId, paramValue) {
+                const checkbox = document.getElementById(checkboxId);
+                if (checkbox) {
+                    const isChecked = paramValue.toLowerCase() === 'true' || paramValue === '1';
+                    checkbox.checked = isChecked;
+                }
+            }
+
+            // Setup all checkboxes
+            setupCheckbox('check1', params.check1);
+            setupCheckbox('check2', params.check2);
+            setupCheckbox('check3', params.check3);
+
+            // Function to setup QR code with signature data
+            function setupQRCode(qrId, signatureData) {
+                const qrElement = document.getElementById(qrId);
+                
+                if (signatureData && signatureData !== '') {
+                    const decodedSignature = decodeURIComponent(signatureData);
+                    const qrData = encodeURIComponent(decodedSignature);
+                    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=${qrData}`;
+                    
+                    if (qrElement) {
+                        qrElement.src = qrUrl;
+                        qrElement.onerror = function() {
+                            const defaultNames = {
+                                'qr1': 'Diminta%20Oleh',
+                                'qr2': 'Menyetujui',
+                                'qr3': 'Pelaksana',
+                                'qr4': 'Diketahui',
+                                'qr5': 'Diterima%20Oleh'
+                            };
+                            qrElement.src = `https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=${defaultNames[qrId] || 'Signature'}`;
+                        };
+                    }
+                } else {
+                    if (qrElement) {
+                        const defaultNames = {
+                            'qr1': 'Diminta%20Oleh',
+                            'qr2': 'Menyetujui',
+                            'qr3': 'Pelaksana',
+                            'qr4': 'Diketahui',
+                            'qr5': 'Diterima%20Oleh'
+                        };
+                        qrElement.src = `https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=${defaultNames[qrId] || 'Signature'}`;
+                    }
+                }
+            }
+
+            // Function to setup name display with priority: name parameter > sig parameter
+            function setupNameDisplay(nameId, nameParam, sigParam) {
+                const nameElement = document.getElementById(nameId);
+                
+                if (nameElement) {
+                    let displayText = '-<br>-';
+                    
+                    // Priority 1: Use name parameter if available
+                    if (nameParam && nameParam !== '') {
+                        const decodedName = decodeURIComponent(nameParam);
+                        const parts = decodedName.split(' - ');
+                        if (parts.length >= 2) {
+                            displayText = `${parts[0]}<br>${parts[1]}`;
+                        } else {
+                            displayText = decodedName.replace(/\s+/g, '<br>');
+                        }
+                    } 
+                    // Priority 2: Use sig parameter if name not available
+                    else if (sigParam && sigParam !== '') {
+                        const decodedSig = decodeURIComponent(sigParam);
+                        const parts = decodedSig.split(' - ');
+                        if (parts.length >= 2) {
+                            displayText = `${parts[0]}<br>${parts[1]}`;
+                        } else {
+                            displayText = decodedSig.replace(/\s+/g, '<br>');
+                        }
+                    }
+                    
+                    nameElement.innerHTML = displayText;
+                }
+            }
+
+            // Setup all QR codes
+            setupQRCode('qr1', params.sig1 || params.name1);
+            setupQRCode('qr2', params.sig2 || params.name2);
+            setupQRCode('qr3', params.sig3 || params.name3);
+            setupQRCode('qr4', params.sig4 || params.name4);
+            setupQRCode('qr5', params.sig5 || params.name5);
+
+            // Setup all name displays
+            setupNameDisplay('name1', params.name1, params.sig1);
+            setupNameDisplay('name2', params.name2, params.sig2);
+            setupNameDisplay('name3', params.name3, params.sig3);
+            setupNameDisplay('name4', params.name4, params.sig4);
+            setupNameDisplay('name5', params.name5, params.sig5);
+
+            // Function to extract URL from AppSheet format
+            function extractUrlFromAppSheetFormat(urlData) {
+                if (!urlData) return '';
+                
+                if (typeof urlData === 'string' && !urlData.startsWith('{')) {
+                    return urlData;
+                }
+                
+                try {
+                    const parsed = JSON.parse(urlData);
+                    return parsed.Url || parsed.LinkText || '';
+                } catch (e) {
+                    return urlData;
+                }
+            }
+
+            // Function to handle image loading
+            function setupImage(imageId, imageUrl) {
+                if (!imageUrl) return;
+                
+                const decodedUrl = decodeURIComponent(imageUrl);
+                const actualUrl = extractUrlFromAppSheetFormat(decodedUrl);
+                
+                if (!actualUrl) return;
+                
+                const imgElement = document.getElementById(imageId);
+                const containerElement = document.getElementById(imageId + '-container');
+                const bgElement = document.getElementById(imageId + '-bg');
+                
+                if (imgElement && containerElement) {
+                    containerElement.classList.add('loading');
+                    
+                    imgElement.onload = function() {
+                        containerElement.classList.remove('loading');
+                        containerElement.classList.add('has-image');
+                    };
+                    
+                    imgElement.onerror = function() {
+                        containerElement.classList.remove('loading');
+                        
+                        if (bgElement) {
+                            bgElement.style.backgroundImage = `url('${actualUrl}')`;
+                            bgElement.classList.add('has-bg-image');
+                            containerElement.style.display = 'none';
+                        }
+                    };
+                    
+                    imgElement.src = actualUrl;
+                }
+            }
+
+            // Setup all images
+            setupImage('image1', params.image1);
+            setupImage('image2', params.image2);
+            setupImage('image3', params.image3);
+            setupImage('image4', params.image4);
+
+            // Update text data
+            const dataElements = document.querySelectorAll('.attr-display');
+            const paramKeys = ['noOK', 'department', 'nama', 'namaKerja', 'jenisKerja', 'waktuKerja', 'rincianKerja', 'koreksi', 'rootCause', 'correctiveAction', 'targetSelesai', 'actualSelesai', 'status'];
+            
+            dataElements.forEach((element, index) => {
+                if (paramKeys[index] && params[paramKeys[index]]) {
+                    const decodedValue = decodeURIComponent(params[paramKeys[index]]);
+                    element.setAttribute('data-value', decodedValue);
+                    
+                    if (paramKeys[index] === 'status') {
+                        const status = decodedValue.toLowerCase();
+                        if (status.includes('selesai') || status.includes('completed')) {
+                            element.classList.add('status-completed');
+                        } else if (status.includes('progress') || status.includes('proses')) {
+                            element.classList.add('status-in-progress');
+                        } else if (status.includes('pending') || status.includes('tunggu')) {
+                            element.classList.add('status-pending');
+                        }
+                    }
+                }
+            });
+        })();
+
+        // Additional utility functions
+        function exportToPDF() {
+            alert('Export PDF memerlukan implementasi library PDF. Gunakan Print untuk saat ini.');
+            window.print();
+        }
+
+        // AppSheet Integration Helper Functions
+        window.AppSheetHelpers = {
+            // Function to format name parameter for AppSheet
+            formatNameParam: function(fullName, position) {
+                return `${fullName} - ${position}`;
+            },
+            
+            // Function to create URL with all parameters
+            createFormURL: function(data) {
+                const baseUrl = window.location.origin + window.location.pathname;
+                const params = new URLSearchParams();
+                
+                // Add all possible parameters
+                Object.keys(data).forEach(key => {
+                    if (data[key] !== null && data[key] !== undefined && data[key] !== '') {
+                        params.append(key, data[key]);
+                    }
+                });
+                
+                return `${baseUrl}?${params.toString()}`;
+            },
+            
+            // Function to validate name format
+            validateNameFormat: function(nameString) {
+                const parts = nameString.split(' - ');
+                return parts.length >= 2 ? {
+                    valid: true,
+                    name: parts[0],
+                    position: parts[1]
+                } : {
+                    valid: false,
+                    error: 'Format harus: "Nama - Jabatan"'
+                };
+            }
+        };
+    </script>
+</body>
+</html>
